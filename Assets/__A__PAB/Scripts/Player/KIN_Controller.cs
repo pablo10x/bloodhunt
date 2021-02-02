@@ -155,12 +155,11 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
     public void OnPressJump()
     {
         if (IS_Driving) return;
-        if (hasAuthority)
-        {
+        
             m_timeSinceJumpRequested = 0f;
             m_jumpRequested = true;
-        }else
-            Debug.LogError("Not local player");
+        
+            
         
 
 
@@ -168,26 +167,29 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
     }
 
 
-    [ClientCallback]
+    
     private void Update()
     {
+        if (!isLocalPlayer)
+        {
+            Debug.LogError("Not Local pllayer");
+            return;
+        }
         if (!IS_Driving)
         {
-            if (hasAuthority)
-            {
                 HandleCharacterInput();
                 HandleCameraInputMobile();
-            }else Debug.LogError("Not Local pllayer");
+          
            
         }
     }
 
-    [ClientCallback]
+    
     private void HandleCameraInputMobile()
     {
         OrbitCamera.UpdateWithInput(Time.deltaTime, ZoomInput, GetTouchInput());
     }
-    [ClientCallback]
+    
     private void HandleCharacterInput()
     {
         //tes
