@@ -155,7 +155,7 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
     public void OnPressJump()
     {
         if (IS_Driving) return;
-        if (isLocalPlayer)
+        if (hasAuthority)
         {
             m_timeSinceJumpRequested = 0f;
             m_jumpRequested = true;
@@ -164,15 +164,16 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
         
 
 
-        //var t = _Animator.GetCurrentAnimatorClipInfo();
+       
     }
 
 
+    [ClientCallback]
     private void Update()
     {
         if (!IS_Driving)
         {
-            if (isLocalPlayer)
+            if (hasAuthority)
             {
                 HandleCharacterInput();
                 HandleCameraInputMobile();
@@ -181,11 +182,12 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
         }
     }
 
+    [ClientCallback]
     private void HandleCameraInputMobile()
     {
         OrbitCamera.UpdateWithInput(Time.deltaTime, ZoomInput, GetTouchInput());
     }
-
+    [ClientCallback]
     private void HandleCharacterInput()
     {
         //tes
