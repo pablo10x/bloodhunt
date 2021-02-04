@@ -168,16 +168,10 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
     }
 
 
-    private bool blocking = false;
+
     private void Update()
     {
-        if (!isLocalPlayer && blocking == false)
-        {
-            blocking = true;
-            Debug.LogWarning("No authority ["+gameObject.name + "]");
-            Debug.LogWarning("Connection ID: "+ NetworkClient.connection);
-            return;
-        }
+        if (!isLocalPlayer) return;
         if (!IS_Driving)
         {
                 HandleCharacterInput();
