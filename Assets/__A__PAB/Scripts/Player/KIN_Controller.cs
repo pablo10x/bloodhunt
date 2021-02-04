@@ -15,7 +15,7 @@ public struct PlayerCharacterInputs
     public bool JumpDown;
 }
 
-public class KIN_Controller : NetworkBehaviour, ICharacterController 
+public class KIN_Controller : NetworkBehaviour, ICharacterController
 {
     public KinematicCharacterMotor Motor;
 
@@ -71,6 +71,7 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
 
     private void Start()
     {
+        
         // assignement
         //joystick
         _Joystick = FindObjectOfType<Joystick>();
@@ -102,7 +103,7 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
         
         _Jump_Botton.GetComponent<Button>().onClick.AddListener(OnPressJump);
     }
-
+#region Vehicle Related
     private void OnExitCar()
     {
         if (!IS_Driving) return;
@@ -151,7 +152,7 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
         if (!_Vehicle.engineRunning) _Vehicle.StartEngine();
         IS_Driving = true;
     }
-
+#endregion
     public void OnPressJump()
     {
         if (IS_Driving) return;
@@ -167,12 +168,14 @@ public class KIN_Controller : NetworkBehaviour, ICharacterController
     }
 
 
-    
+    private bool blocking = false;
     private void Update()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer && blocking == false)
         {
-            Debug.LogError("Not Local pllayer");
+            blocking = true;
+            Debug.LogWarning("No authority ["+gameObject.name + "]");
+            Debug.LogWarning("Connection ID: "+ NetworkClient.connection);
             return;
         }
         if (!IS_Driving)
